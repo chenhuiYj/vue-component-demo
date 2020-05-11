@@ -1,0 +1,199 @@
+<template>
+  <div class="tmg-sort">
+    <div class="tmg-sort--item" v-for="(item,index) in value" :key="index" :class="{'cur':nowClickIndex===index||show}" :style="getStyle(index)" @click="switchCur(index)">
+      <slot :data="item"></slot>
+      <ul class="customer-form-view-action-box" v-if="isSort" :style="ulPosition" :class="{'sort-vertical':direction==='vertical'}">
+        <li class="iconfont icon-icon-cus-edit" @click.stop="handleEvent('edit',index)"></li>
+        <li class="iconfont icon-icon-cus-up" @click.stop="handleEvent('up',index)" v-if="index!==0"></li>
+        <li class="iconfont icon-icon-cus-down" @click.stop="handleEvent('down',index)" v-if="index!==value.length-1"></li>
+        <li class="iconfont icon-icon-cus-del" @click.stop="handleEvent('delete',index)"></li>
+      </ul>
+    </div>
+  </div>
+</template>
+<script>
+export default {
+  name: 'Sort',
+  componentName: 'Sort',
+  props: {
+    value: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
+    top: {
+      type: [String, Number],
+      default: '0'
+    },
+    bottom: {
+      type: [String, Number],
+      default: 'auto'
+    },
+    left: {
+      type: [String, Number],
+      default: 'auto'
+    },
+    right: {
+      type: [String, Number],
+      default: '-26px'
+    },
+    isSort: {
+      type: [Boolean],
+      default: true
+    },
+    show: {
+      type: [Boolean],
+      default: false
+    },
+    direction: {
+      type: String,
+      default: 'horizontal'
+    },
+    unselectedStyle: {
+      type: String,
+      default: ''
+    },
+    selectedStyle: {
+      type: String,
+      default: ''
+    },
+    itemStyle: {
+      type: String,
+      default: ''
+    },
+    beforeDelete: {
+      type: Function
+    },
+    beforeUp: {
+      type: Function
+    },
+    beforeDown: {
+      type: Function
+    },
+    beforeEdit: {
+      type: Function
+    }
+  },
+  data () {
+    return {
+      curHandleIndex: '',
+      sortData: [],
+      type: '',
+      nowClickIndex: ''
+    }
+  },
+  computed: {
+    maginDirection () {
+      return this.direction === 'horizontal' ? 'margin-right' : 'margin-bottom'
+    },
+    ulPosition () {
+      let obj = {
+        left: this.left,
+        right: this.right,
+        top: this.top,
+        bottom: this.bottom
+      }
+      let _x = '0'
+      let _y = '0'
+      if (this.top === 'center' || this.bottom === 'center') {
+        obj.top = '50%'
+        obj.bottom = 'auto'
+        _y = '-50%'
+        obj.transform = `translate(${_x},${_y})`
+      }
+      if (this.left === 'center' || this.right === 'center') {
+        obj.left = '50%'
+        obj.right = 'auto'
+        _x = '-50%'
+        obj.transform = `translate(${_x},${_y})`
+      }
+      return obj
+    }
+  },
+  mounted () {
+  },
+  methods: {
+    getStyle (index) {
+      let _style = this.nowClickIndex === index ? this.selectedStyle : this.unselectedStyle
+      _style += this.itemStyle
+      return _style
+    },
+    handle () {
+      let _list = JSON.parse(JSON.stringify(this.value))
+      let _nowItem = _list[this.curHandleIndex]
+      switch (this.type) {
+        case 'up' :
+          _list.splice(this.curHandleIndex, 1)
+          _list.splice(this.curHandleIndex - 1, 0, _nowItem); break
+        case 'down' :
+          _list.splice(this.curHandleIndex, 1)
+          _list.splice(this.curHandleIndex + 1, 0, _nowItem); break
+        case 'delete' :
+          _list.splice(this.curHandleIndex, 1)
+      }
+      this.$emit('input', _list)
+      this.$emit(this.type, this.curHandleIndex)
+    },
+    handleEvent (type, index) {
+      this.type = type
+      this.curHandleIndex = index
+      let _type = type.substr(0, 1).toUpperCase() + type.substr(1)
+      if (typeof this[`before${_type}`] === 'function') {
+        this[`before${_type}`](this.handle)
+      } else {
+        this.handle()
+      }
+    },
+    switchCur (index) {
+      this.nowClickIndex = index
+    }
+  }
+}
+</script>
+<style lang="scss" scoped>
+.tmg-sort{
+  video,audio,img{
+    max-width: 100%;
+  }
+  video,audio{
+    outline: none;
+  }
+}
+.tmg-sort--item{
+  position: relative;
+  ul{
+    position: absolute;
+    right:-26px;
+    top:0;
+    display: none;
+    line-height: 24px;
+    &.sort-vertical{
+      li{
+        display: inline-block;
+        vertical-align: top;
+      }
+    }
+  }
+  &.cur{
+    ul{
+      display: inline-block;
+    }
+  }
+  li{
+    list-style-type: none;
+    width: 24px;
+    height: 24px;
+    margin: 0 2px 2px 0;
+    background: #0b5873;
+    color: #fff;
+    text-align: center;
+    line-height: 24px;
+    font-size: 12px;
+    cursor: pointer;
+    &:hover{
+      background: #127192;
+    }
+  }
+}
+</style>
