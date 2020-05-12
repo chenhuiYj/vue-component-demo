@@ -30,46 +30,46 @@
 </template>
 <script>
 export default {
-  name: "Sort",
-  componentName: "Sort",
+  name: 'Sort',
+  componentName: 'Sort',
   props: {
     value: {
       type: Array,
-      default() {
-        return [];
+      default () {
+        return []
       }
     }
   },
-  data() {
+  data () {
     return {
-      nowClickIndex: ""
-    };
+      nowClickIndex: ''
+    }
   },
-  mounted() {},
+  mounted () {},
   methods: {
-    handleEvent(type, index) {
-      let _list = JSON.parse(JSON.stringify(this.value));
-      let _nowItem = _list[index];
+    handleEvent (type, index) {
+      let _list = JSON.parse(JSON.stringify(this.value))
+      let _nowItem = _list[index]
       switch (type) {
-        case "up":
-          _list.splice(index, 1);
-          _list.splice(index - 1, 0, _nowItem);
-          break;
-        case "down":
-          _list.splice(index, 1);
-          _list.splice(index + 1, 0, _nowItem);
-          break;
-        case "delete":
-          _list.splice(index, 1);
+        case 'up':
+          _list.splice(index, 1)
+          _list.splice(index - 1, 0, _nowItem)
+          break
+        case 'down':
+          _list.splice(index, 1)
+          _list.splice(index + 1, 0, _nowItem)
+          break
+        case 'delete':
+          _list.splice(index, 1)
       }
-      this.$emit("input", _list);
-      this.$emit(type, index);
+      this.$emit('input', _list)
+      this.$emit(type, index)
     },
-    switchCur(index) {
-      this.nowClickIndex = index;
+    switchCur (index) {
+      this.nowClickIndex = index
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .tmg-sort {

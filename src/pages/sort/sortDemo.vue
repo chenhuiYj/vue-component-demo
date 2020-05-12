@@ -14,6 +14,9 @@
         <tmg-image :src="item.data.fileUrl" v-if="item.data.fileType==='image'" />
       </div>
     </sortList>
+    <p>
+      <br />
+    </p>
     <sortList
       v-model="sortData"
       @edit="editViewItem"
@@ -40,72 +43,83 @@
         </div>
       </div>
     </sortList>
+    <p>
+      <br />
+    </p>
     <sortListOld v-model="sortData" @edit="editViewItem" />
   </div>
 </template>
 <script>
-import sortList from "./components/sortList";
-import sortListOld from "./components/sortListOld";
+import sortList from './components/sortList'
+import sortListOld from './components/sortListOld'
 export default {
-  data() {
+  data () {
     return {
       iconByFileType: {
-        text: "icon-wenben",
-        image: "icon-tupian1",
-        video: "icon-shipin",
-        audio: "icon-yinpin",
-        link: "icon-duanlian"
+        text: 'icon-wenben',
+        image: 'icon-tupian1',
+        video: 'icon-shipin',
+        audio: 'icon-yinpin',
+        link: 'icon-duanlian'
       },
       sortData: [
         {
-          fileType: "text",
+          fileType: 'text',
           fileUrl:
-            "https://file-cdn-china.wechatify.net/marketing/sms/mms_material/gWp3COMYDA.txt",
+            'https://file-cdn-china.wechatify.net/marketing/sms/mms_material/lm9wf5m8j7.txt',
           index: 1,
           size: 12,
-          fileName: "gWp3COMYDA.txt"
+          fileName: 'lm9wf5m8j7.txt'
         },
         {
-          fileNmae: "251bb6d882024b11a6051d604ac51fc3.jpeg",
-          fileType: "image",
+          fileType: 'text',
           fileUrl:
-            "https://file-cdn-china.wechatify.net/marketing/sms/mms_material/53ce422f14e516af0eb9a5c7251cc1ca.jpeg",
+            'https://file-cdn-china.wechatify.net/marketing/sms/mms_material/gWp3COMYDA.txt',
           index: 2,
+          size: 12,
+          fileName: 'gWp3COMYDA.txt'
+        },
+        {
+          fileNmae: '251bb6d882024b11a6051d604ac51fc3.jpeg',
+          fileType: 'image',
+          fileUrl:
+            'https://file-cdn-china.wechatify.net/marketing/sms/mms_material/53ce422f14e516af0eb9a5c7251cc1ca.jpeg',
+          index: 3,
           size: 101109,
-          fileName: "53ce422f14e516af0eb9a5c7251cc1ca.jpeg"
+          fileName: '53ce422f14e516af0eb9a5c7251cc1ca.jpeg'
         }
       ]
-    };
+    }
   },
   components: { sortList, sortListOld },
-  mounted() {},
+  mounted () {},
   methods: {
-    formatSize(val) {
+    formatSize (val) {
       if (val === 0) {
-        return "0B";
+        return '0B'
       }
       let sizeObj = {
         MB: 1048576,
         KB: 1024,
         B: 1
-      };
-      val = +val;
+      }
+      val = +val
       for (let key in sizeObj) {
         if (val >= sizeObj[key]) {
-          return +(val / sizeObj[key]).toFixed(2) + key;
+          return +(val / sizeObj[key]).toFixed(2) + key
         }
       }
     },
-    editViewItem() {},
-    test(done) {
-      this.$confirm("确认进行操作？")
+    editViewItem () {},
+    test (done) {
+      this.$confirm('确认进行操作？')
         .then(() => {
-          done();
+          done()
         })
-        .catch(() => {});
+        .catch(() => {})
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .main {

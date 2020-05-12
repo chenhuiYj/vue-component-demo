@@ -2,26 +2,33 @@
   <span>{{text}}</span>
 </template>
 <script>
-import axios from "axios";
 export default {
-  name: "TmgText",
+  name: 'TmgText',
   props: {
     src: {
       type: String,
-      default: ""
+      default: ''
     }
   },
-  data() {
+  data () {
     return {
-      text: ""
-    };
+      text: ''
+    }
   },
-  mounted() {
-    axios.get(this.src).then(res => {
-      this.text = res.data;
-    });
+  watch: {
+    src (val) {
+      this.$axios.get(val).then(res => {
+        this.text = res.data
+      })
+    }
+  },
+
+  mounted () {
+    this.$axios.get(this.src).then(res => {
+      this.text = res.data
+    })
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 </style>

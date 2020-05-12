@@ -3,7 +3,7 @@ module.exports = {
   env: {
     node: true
   },
-  extends: ["plugin:vue/essential", "eslint:recommended"],
+  extends: ["plugin:vue/essential", "@vue/standard"],
   rules: {
     "no-console": "off",
     "no-debugger": "off"

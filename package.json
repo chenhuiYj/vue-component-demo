@@ -16,6 +16,7 @@
     "@vue/cli-plugin-babel": "^4.3.0",
     "@vue/cli-plugin-eslint": "^4.3.0",
     "@vue/cli-service": "^4.3.0",
+    "@vue/eslint-config-standard": "^4.0.0",
     "axios": "^0.19.2",
     "babel-eslint": "^10.1.0",
     "element-ui": "^2.13.1",
@@ -34,10 +35,10 @@
       "plugin:vue/essential",
       "eslint:recommended"
     ],
+    "rules": {},
     "parserOptions": {
       "parser": "babel-eslint"
-    },
-    "rules": {}
+    }
   },
   "browserslist": [
     "> 1%",

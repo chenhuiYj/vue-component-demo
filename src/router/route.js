@@ -13,5 +13,5 @@ export default [
   {
     path: '/sort',
     component: sort
-  },
+  }
 ]

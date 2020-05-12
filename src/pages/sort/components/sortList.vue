@@ -1,11 +1,31 @@
 <template>
   <div class="tmg-sort">
-    <div class="tmg-sort--item" v-for="(item,index) in value" :key="index" :class="{'cur':nowClickIndex===index||show}" :style="getStyle(index)" @click="switchCur(index)">
+    <div
+      class="tmg-sort--item"
+      v-for="(item,index) in value"
+      :key="index"
+      :class="{'cur':nowClickIndex===index||show}"
+      :style="getStyle(index)"
+      @click="switchCur(index)"
+    >
       <slot :data="item"></slot>
-      <ul class="customer-form-view-action-box" v-if="isSort" :style="ulPosition" :class="{'sort-vertical':direction==='vertical'}">
+      <ul
+        class="customer-form-view-action-box"
+        v-if="isSort"
+        :style="ulPosition"
+        :class="{'sort-vertical':direction==='vertical'}"
+      >
         <li class="iconfont icon-icon-cus-edit" @click.stop="handleEvent('edit',index)"></li>
-        <li class="iconfont icon-icon-cus-up" @click.stop="handleEvent('up',index)" v-if="index!==0"></li>
-        <li class="iconfont icon-icon-cus-down" @click.stop="handleEvent('down',index)" v-if="index!==value.length-1"></li>
+        <li
+          class="iconfont icon-icon-cus-up"
+          @click.stop="handleEvent('up',index)"
+          v-if="index!==0"
+        ></li>
+        <li
+          class="iconfont icon-icon-cus-down"
+          @click.stop="handleEvent('down',index)"
+          v-if="index!==value.length-1"
+        ></li>
         <li class="iconfont icon-icon-cus-del" @click.stop="handleEvent('delete',index)"></li>
       </ul>
     </div>
@@ -111,11 +131,13 @@ export default {
       return obj
     }
   },
-  mounted () {
-  },
+  mounted () {},
   methods: {
     getStyle (index) {
-      let _style = this.nowClickIndex === index ? this.selectedStyle : this.unselectedStyle
+      let _style =
+        this.nowClickIndex === index
+          ? this.selectedStyle
+          : this.unselectedStyle
       _style += this.itemStyle
       return _style
     },
@@ -123,16 +145,19 @@ export default {
       let _list = JSON.parse(JSON.stringify(this.value))
       let _nowItem = _list[this.curHandleIndex]
       switch (this.type) {
-        case 'up' :
+        case 'up':
           _list.splice(this.curHandleIndex, 1)
-          _list.splice(this.curHandleIndex - 1, 0, _nowItem); break
-        case 'down' :
+          _list.splice(this.curHandleIndex - 1, 0, _nowItem)
+          break
+        case 'down':
           _list.splice(this.curHandleIndex, 1)
-          _list.splice(this.curHandleIndex + 1, 0, _nowItem); break
-        case 'delete' :
+          _list.splice(this.curHandleIndex + 1, 0, _nowItem)
+          break
+        case 'delete':
           _list.splice(this.curHandleIndex, 1)
       }
       this.$emit('input', _list)
+      this.$forceUpdate()
       this.$emit(this.type, this.curHandleIndex)
     },
     handleEvent (type, index) {
@@ -152,35 +177,38 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.tmg-sort{
-  video,audio,img{
+.tmg-sort {
+  video,
+  audio,
+  img {
     max-width: 100%;
   }
-  video,audio{
+  video,
+  audio {
     outline: none;
   }
 }
-.tmg-sort--item{
+.tmg-sort--item {
   position: relative;
-  ul{
+  ul {
     position: absolute;
-    right:-26px;
-    top:0;
+    right: -26px;
+    top: 0;
     display: none;
     line-height: 24px;
-    &.sort-vertical{
-      li{
+    &.sort-vertical {
+      li {
         display: inline-block;
         vertical-align: top;
       }
     }
   }
-  &.cur{
-    ul{
+  &.cur {
+    ul {
       display: inline-block;
     }
   }
-  li{
+  li {
     list-style-type: none;
     width: 24px;
     height: 24px;
@@ -191,7 +219,7 @@ export default {
     line-height: 24px;
     font-size: 12px;
     cursor: pointer;
-    &:hover{
+    &:hover {
       background: #127192;
     }
   }
