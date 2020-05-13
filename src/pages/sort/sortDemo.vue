@@ -14,6 +14,7 @@
         <tmg-image :src="item.data.fileUrl" v-if="item.data.fileType==='image'" />
       </div>
     </sortList>
+
     <p>
       <br />
     </p>
