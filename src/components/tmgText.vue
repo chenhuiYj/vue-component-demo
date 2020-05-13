@@ -22,7 +22,6 @@ export default {
       })
     }
   },
-
   mounted () {
     this.$axios.get(this.src).then(res => {
       this.text = res.data
