@@ -3,7 +3,7 @@
 </template>
 <script>
 export default {
-  name: 'TmgText',
+  name: 'EcText',
   props: {
     src: {
       type: String,

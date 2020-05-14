@@ -1,7 +1,7 @@
 <template>
-  <div class="tmg-handle">
+  <div class="ec-handle">
     <div
-      class="tmg-handle--item"
+      class="ec-handle--item"
       v-for="(item,index) in sortData"
       :key="item.$_key"
       :class="{'cur':nowClickIndex===item.$_key ||show}"
@@ -23,7 +23,7 @@
         <li
           class="iconfont icon-icon-cus-down"
           @click.stop="handleEvent('down',item,index)"
-          v-if="index!==value.length-1"
+          v-if="index!==sortData.length-1"
         ></li>
         <li class="iconfont icon-icon-cus-del" @click.stop="handleEvent('delete',item,index)"></li>
       </ul>
@@ -164,7 +164,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.tmg-handle {
+.ec-handle {
   video,
   audio,
   img {
@@ -175,7 +175,7 @@ export default {
     outline: none;
   }
 }
-.tmg-handle--item {
+.ec-handle--item {
   position: relative;
   ul {
     position: absolute;

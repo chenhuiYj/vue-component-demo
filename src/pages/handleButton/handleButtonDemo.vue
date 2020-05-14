@@ -5,11 +5,11 @@
       @edit="editViewItem"
     >
       <div slot-scope="item" class="view-item" :class="{'cur':item.data.$select}">
-        <tmg-text v-if="item.data.fileType==='text'" :src="item.data.fileUrl"></tmg-text>
+        <ec-text v-if="item.data.fileType==='text'" :src="item.data.fileUrl"></ec-text>
         <a href="javascript:;" v-if="item.data.fileType==='link'">{{item.data.customer}}</a>
         <video :src="item.data.fileUrl" v-if="item.data.fileType==='video'"></video>
         <audio :src="item.data.fileUrl" controls="controls" v-if="item.data.fileType==='audio'"></audio>
-        <tmg-image :src="item.data.fileUrl" v-if="item.data.fileType==='image'" />
+        <ec-image :src="item.data.fileUrl" v-if="item.data.fileType==='image'" />
       </div>
     </handle-button>
     <p>
@@ -33,7 +33,7 @@
         </div>
         <div class="message-item___info">
           <p v-if="item.data.fileType==='text'">
-            <tmgText :src="item.data.fileUrl"></tmgText>
+            <ec-text :src="item.data.fileUrl"></ec-text>
           </p>
           <p v-else>{{item.data.fileName}}</p>
           <span class="message-item___info_size">{{formatSize(item.data.size)}}</span>

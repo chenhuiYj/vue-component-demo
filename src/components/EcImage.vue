@@ -28,7 +28,7 @@ function checkWebp () {
 let format = checkWebp() ? '.webp' : ''
 // getImageFormat()
 export default {
-  name: 'TmgImage',
+  name: 'EcImage',
   props: {
     src: {
       type: String,
