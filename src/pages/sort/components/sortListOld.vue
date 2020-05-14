@@ -2,10 +2,10 @@
   <div class="tmg-sort">
     <div
       class="tmg-sort--item"
-      v-for="(item,index) in value"
-      :key="index"
-      :class="{'cur':nowClickIndex===index}"
-      @click="switchCur(index)"
+      v-for="(item,index) in sortData"
+      :key="item.$_key"
+      :class="{'cur':nowClickIndex===item.$_key}"
+      @click="switchCur(item)"
     >
       <tmgText v-if="item.fileType==='text'" :src="item.fileUrl"></tmgText>
       <video :src="item.fileUrl" v-if="item.fileType==='video'"></video>
@@ -46,6 +46,15 @@ export default {
     }
   },
   mounted () {},
+  computed: {
+    sortData () {
+      let arr = JSON.parse(JSON.stringify(this.value))
+      for (let item of arr) {
+        item.$_key = Symbol.for('$sort-key:' + JSON.stringify(item))
+      }
+      return arr
+    }
+  },
   methods: {
     handleEvent (type, index) {
       let _list = JSON.parse(JSON.stringify(this.value))
@@ -65,8 +74,8 @@ export default {
       this.$emit('input', _list)
       this.$emit(type, index)
     },
-    switchCur (index) {
-      this.nowClickIndex = index
+    switchCur (item) {
+      this.nowClickIndex = item.$_key
     }
   }
 }

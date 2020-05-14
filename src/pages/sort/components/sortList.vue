@@ -5,7 +5,6 @@
       v-for="(item,index) in sortData"
       :key="item.$_key"
       :class="{'cur':nowClickIndex===item.$_key ||show}"
-      :style="getStyle(item)"
       @click="switchCur(item)"
     >
       <slot :data="getItem(item,index)"></slot>
@@ -87,24 +86,17 @@ export default {
     return {
       curHandleIndex: '',
       type: '',
-      nowClickIndex: '',
-      sortData: [],
-      sorrObj: {}
-    }
-  },
-  watch: {
-    value: {
-      handler (val) {
-        let arr = JSON.parse(JSON.stringify(val))
-        for (let item of arr) {
-          item.$_key = Symbol.for('$sort-key:' + JSON.stringify(item))
-        }
-        this.sortData = arr
-      },
-      deep: true
+      nowClickIndex: ''
     }
   },
   computed: {
+    sortData () {
+      let arr = JSON.parse(JSON.stringify(this.value))
+      for (let item of arr) {
+        item.$_key = Symbol.for('$sort-key:' + JSON.stringify(item))
+      }
+      return arr
+    },
     maginDirection () {
       return this.direction === 'horizontal' ? 'margin-right' : 'margin-bottom'
     },
@@ -135,14 +127,6 @@ export default {
   methods: {
     getItem (item, index) {
       return Object.assign({}, item, { $index: index, $select: this.nowClickIndex === item.$_key })
-    },
-    getStyle (item) {
-      let _style =
-        this.nowClickIndex === item.$_key
-          ? this.selectedStyle
-          : this.unselectedStyle
-      _style += this.itemStyle
-      return _style
     },
     handle () {
       let _list = JSON.parse(JSON.stringify(this.value))
