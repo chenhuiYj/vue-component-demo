@@ -3,10 +3,8 @@
     <sortList
       v-model="sortData"
       @edit="editViewItem"
-      selectedStyle="border:1px dashed #003453;"
-      unselectedStyle="border:1px dashed transparent;"
     >
-      <div slot-scope="item" class="view-item">
+      <div slot-scope="item" class="view-item" :class="{'cur':item.data.$select}">
         <tmg-text v-if="item.data.fileType==='text'" :src="item.data.fileUrl"></tmg-text>
         <a href="javascript:;" v-if="item.data.fileType==='link'">{{item.data.customer}}</a>
         <video :src="item.data.fileUrl" v-if="item.data.fileType==='video'"></video>
@@ -14,7 +12,6 @@
         <tmg-image :src="item.data.fileUrl" v-if="item.data.fileType==='image'" />
       </div>
     </sortList>
-
     <p>
       <br />
     </p>
@@ -29,7 +26,6 @@
       :beforeUp="test"
       :beforeDown="test"
       :beforeEdit="test"
-      itemStyle="margin-bottom:10px;"
     >
       <div slot-scope="item" class="sort-item">
         <div class="message-item___box">
@@ -93,7 +89,45 @@ export default {
     }
   },
   components: { sortList, sortListOld },
-  mounted () {},
+  mounted () {
+    setTimeout(() => {
+      this.sortData = [
+        {
+          fileType: 'text',
+          fileUrl:
+            'https://file-cdn-china.wechatify.net/marketing/sms/mms_material/gWp3COMYDA.txt',
+          index: 2,
+          size: 12,
+          fileName: 'gWp3COMYDA.txt'
+        },
+        {
+          fileType: 'text',
+          fileUrl:
+            'https://file-cdn-china.wechatify.net/marketing/sms/mms_material/lm9wf5m8j7.txt',
+          index: 1,
+          size: 12,
+          fileName: 'lm9wf5m8j7.txt'
+        },
+        {
+          fileNmae: '251bb6d882024b11a6051d604ac51fc3.jpeg',
+          fileType: 'image',
+          fileUrl:
+            'https://file-cdn-china.wechatify.net/marketing/sms/mms_material/53ce422f14e516af0eb9a5c7251cc1ca.jpeg',
+          index: 3,
+          size: 101109,
+          fileName: '53ce422f14e516af0eb9a5c7251cc1ca.jpeg'
+        },
+        {
+          fileType: 'text',
+          fileUrl:
+            'https://file-cdn-china.wechatify.net/marketing/sms/mms_material/lm9wf5m8j7.txt',
+          index: 5,
+          size: 12,
+          fileName: 'lm9wf5m8j7.txt'
+        }
+      ]
+    }, 5000)
+  },
   methods: {
     formatSize (val) {
       if (val === 0) {
@@ -128,6 +162,10 @@ export default {
   margin: 0 auto;
   .view-item {
     padding: 10px;
+    border:1px dashed transparent;
+    &.cur{
+      border:1px dashed #003453;
+    }
   }
 }
 .sort-item {
@@ -136,6 +174,7 @@ export default {
   display: flex;
   border: 1px solid #e4e4e4;
   border-radius: 4px;
+  margin-bottom:10px;
   .message-item___box {
     width: 48px;
     height: 48px;

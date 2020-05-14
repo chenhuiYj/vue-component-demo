@@ -2,31 +2,31 @@
   <div class="tmg-sort">
     <div
       class="tmg-sort--item"
-      v-for="(item,index) in value"
-      :key="index"
-      :class="{'cur':nowClickIndex===index||show}"
-      :style="getStyle(index)"
-      @click="switchCur(index)"
+      v-for="(item,index) in sortData"
+      :key="item.$_key"
+      :class="{'cur':nowClickIndex===item.$_key ||show}"
+      :style="getStyle(item)"
+      @click="switchCur(item)"
     >
-      <slot :data="item"></slot>
+      <slot :data="getItem(item,index)"></slot>
       <ul
         class="customer-form-view-action-box"
         v-if="isSort"
         :style="ulPosition"
         :class="{'sort-vertical':direction==='vertical'}"
       >
-        <li class="iconfont icon-icon-cus-edit" @click.stop="handleEvent('edit',index)"></li>
+        <li class="iconfont icon-icon-cus-edit" @click.stop="handleEvent('edit',item,index)"></li>
         <li
           class="iconfont icon-icon-cus-up"
-          @click.stop="handleEvent('up',index)"
+          @click.stop="handleEvent('up',item,index)"
           v-if="index!==0"
         ></li>
         <li
           class="iconfont icon-icon-cus-down"
-          @click.stop="handleEvent('down',index)"
+          @click.stop="handleEvent('down',item,index)"
           v-if="index!==value.length-1"
         ></li>
-        <li class="iconfont icon-icon-cus-del" @click.stop="handleEvent('delete',index)"></li>
+        <li class="iconfont icon-icon-cus-del" @click.stop="handleEvent('delete',item,index)"></li>
       </ul>
     </div>
   </div>
@@ -70,18 +70,6 @@ export default {
       type: String,
       default: 'horizontal'
     },
-    unselectedStyle: {
-      type: String,
-      default: ''
-    },
-    selectedStyle: {
-      type: String,
-      default: ''
-    },
-    itemStyle: {
-      type: String,
-      default: ''
-    },
     beforeDelete: {
       type: Function
     },
@@ -98,9 +86,22 @@ export default {
   data () {
     return {
       curHandleIndex: '',
-      sortData: [],
       type: '',
-      nowClickIndex: ''
+      nowClickIndex: '',
+      sortData: [],
+      sorrObj: {}
+    }
+  },
+  watch: {
+    value: {
+      handler (val) {
+        let arr = JSON.parse(JSON.stringify(val))
+        for (let item of arr) {
+          item.$_key = Symbol.for('$sort-key:' + JSON.stringify(item))
+        }
+        this.sortData = arr
+      },
+      deep: true
     }
   },
   computed: {
@@ -131,11 +132,13 @@ export default {
       return obj
     }
   },
-  mounted () {},
   methods: {
-    getStyle (index) {
+    getItem (item, index) {
+      return Object.assign({}, item, { $index: index, $select: this.nowClickIndex === item.$_key })
+    },
+    getStyle (item) {
       let _style =
-        this.nowClickIndex === index
+        this.nowClickIndex === item.$_key
           ? this.selectedStyle
           : this.unselectedStyle
       _style += this.itemStyle
@@ -160,7 +163,7 @@ export default {
       this.$forceUpdate()
       this.$emit(this.type, this.curHandleIndex)
     },
-    handleEvent (type, index) {
+    handleEvent (type, item, index) {
       this.type = type
       this.curHandleIndex = index
       let _type = type.substr(0, 1).toUpperCase() + type.substr(1)
@@ -170,8 +173,8 @@ export default {
         this.handle()
       }
     },
-    switchCur (index) {
-      this.nowClickIndex = index
+    switchCur (item) {
+      this.nowClickIndex = item.$_key
     }
   }
 }

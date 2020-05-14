@@ -1,13 +1,12 @@
 <template>
   <div class="">
-    asd
+    首页，待开发
   </div>
 </template>
 <script>
 export default {
   data () {
     return {
-
     }
   },
   mounted () {
