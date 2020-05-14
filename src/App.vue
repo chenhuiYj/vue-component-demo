@@ -1,21 +1,58 @@
 <template>
   <div id="app">
-    <ul>
-      <li>handleButton</li>
+    <ul class="sider-bar">
+      <li @click="switchPath('/handleButton')" :class="{'cur':curpath==='/handleButton'}">handleButton</li>
     </ul>
-    <router-view></router-view>
+    <div class="content">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'App',
-  components: {}
+  components: {},
+  data () {
+    return {
+      curpath: ''
+    }
+  },
+  mounted () {
+    this.curpath = this.$route.path
+  },
+  methods: {
+    switchPath (path) {
+      if (this.curpath === path) {
+        return
+      }
+      this.curpath = path
+      this.$router.push({ path })
+    }
+  }
 }
 </script>
 
-<style>
+<style lang="scss">
 #app {
-  margin-top: 60px;
+  display: flex;
+  .sider-bar{
+    width: 200px;
+    text-align: center;
+    position: sticky;
+    top:0;
+    li{
+      line-height: 40px;
+      background: #ccc;
+      cursor: pointer;
+      &.cur,&:hover{
+        background: #09f;
+        color:#fff;
+      }
+    }
+  }
+  .content{
+    flex: 1;
+  }
 }
 </style>

@@ -1,5 +1,5 @@
 import index from '../pages/index'
-import sort from '../pages/sort/sortDemo'
+import handleButton from '../pages/handleButton/handleButtonDemo'
 
 export default [
   {
@@ -11,7 +11,7 @@ export default [
     component: index
   },
   {
-    path: '/sort',
-    component: sort
+    path: '/handleButton',
+    component: handleButton
   }
 ]
