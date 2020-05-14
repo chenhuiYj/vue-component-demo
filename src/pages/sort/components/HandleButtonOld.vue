@@ -1,7 +1,7 @@
 <template>
-  <div class="tmg-sort">
+  <div class="tmg-handle">
     <div
-      class="tmg-sort--item"
+      class="tmg-handle--item"
       v-for="(item,index) in sortData"
       :key="item.$_key"
       :class="{'cur':nowClickIndex===item.$_key}"
@@ -30,8 +30,8 @@
 </template>
 <script>
 export default {
-  name: 'Sort',
-  componentName: 'Sort',
+  name: 'HandleButton',
+  componentName: 'HandleButton',
   props: {
     value: {
       type: Array,
@@ -50,7 +50,7 @@ export default {
     sortData () {
       let arr = JSON.parse(JSON.stringify(this.value))
       for (let item of arr) {
-        item.$_key = Symbol.for('$sort-key:' + JSON.stringify(item))
+        item.$_key = Symbol.for('$handle-key:' + JSON.stringify(item))
       }
       return arr
     }
@@ -81,7 +81,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.tmg-sort {
+.tmg-handle {
   video,
   audio,
   img {
@@ -92,7 +92,7 @@ export default {
     outline: none;
   }
 }
-.tmg-sort--item {
+.tmg-handle--item {
   position: relative;
   border: 1px dashed transparent;
   padding: 10px;
@@ -102,7 +102,7 @@ export default {
     top: 0;
     display: none;
     line-height: 24px;
-    &.sort-vertical {
+    &.handle-vertical {
       li {
         display: inline-block;
         vertical-align: top;

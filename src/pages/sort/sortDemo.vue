@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <sortList
+    <handle-button
       v-model="sortData"
       @edit="editViewItem"
     >
@@ -11,11 +11,11 @@
         <audio :src="item.data.fileUrl" controls="controls" v-if="item.data.fileType==='audio'"></audio>
         <tmg-image :src="item.data.fileUrl" v-if="item.data.fileType==='image'" />
       </div>
-    </sortList>
+    </handle-button>
     <p>
       <br />
     </p>
-    <sortList
+    <handle-button
       v-model="sortData"
       @edit="editViewItem"
       direction="vertical"
@@ -27,7 +27,7 @@
       :beforeDown="test"
       :beforeEdit="test"
     >
-      <div slot-scope="item" class="sort-item">
+      <div slot-scope="item" class="handle-item">
         <div class="message-item___box">
           <span class="message-item___icon iconfont" :class="iconByFileType[item.data.fileType]"></span>
         </div>
@@ -39,16 +39,16 @@
           <span class="message-item___info_size">{{formatSize(item.data.size)}}</span>
         </div>
       </div>
-    </sortList>
+    </handle-button>
     <p>
       <br />
     </p>
-    <sortListOld v-model="sortData" @edit="editViewItem" />
+    <handle-button-old v-model="sortData" @edit="editViewItem" />
   </div>
 </template>
 <script>
-import sortList from './components/sortList'
-import sortListOld from './components/sortListOld'
+import HandleButton from './components/HandleButton'
+import HandleButtonOld from './components/HandleButtonOld'
 export default {
   data () {
     return {
@@ -88,7 +88,7 @@ export default {
       ]
     }
   },
-  components: { sortList, sortListOld },
+  components: { HandleButton, HandleButtonOld },
   mounted () {
     setTimeout(() => {
       this.sortData = [
@@ -168,7 +168,7 @@ export default {
     }
   }
 }
-.sort-item {
+.handle-item {
   padding: 10px;
   background: #fff;
   display: flex;

@@ -1,5 +1,8 @@
 <template>
   <div id="app">
+    <ul>
+      <li>handleButton</li>
+    </ul>
     <router-view></router-view>
   </div>
 </template>
