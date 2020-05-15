@@ -2,15 +2,15 @@
   <div class="ec-handle">
     <div
       class="ec-handle--item"
-      v-for="(item,index) in sortData"
-      :key="item.$_key"
-      :class="{'cur':nowClickIndex===item.$_key ||show}"
-      @click="switchCur(item)"
+      v-for="(item,index) in value"
+      :key="index"
+      :class="{'cur':nowClickIndex===index ||display==='visible'}"
+      @click="switchCur(item,index)"
     >
       <slot :data="getItem(item,index)"></slot>
       <ul
         class="customer-form-view-action-box"
-        v-if="isSort"
+        v-if="display!=='none'"
         :style="ulPosition"
         :class="{'handle-vertical':direction==='vertical'}"
       >
@@ -23,7 +23,7 @@
         <li
           class="iconfont icon-icon-cus-down"
           @click.stop="handleEvent('down',item,index)"
-          v-if="index!==sortData.length-1"
+          v-if="index!==value.length-1"
         ></li>
         <li class="iconfont icon-icon-cus-del" @click.stop="handleEvent('delete',item,index)"></li>
       </ul>
@@ -57,13 +57,9 @@ export default {
       type: [String, Number],
       default: '-26px'
     },
-    isSort: {
-      type: [Boolean],
-      default: true
-    },
-    show: {
-      type: [Boolean],
-      default: false
+    display: {
+      type: [String],
+      default: 'default'
     },
     direction: {
       type: String,
@@ -85,21 +81,12 @@ export default {
   data () {
     return {
       curHandleIndex: '',
-      type: '',
-      nowClickIndex: ''
+      eventType: '',
+      nowClickIndex: '',
+      keyMap: new Map()
     }
   },
   computed: {
-    sortData () {
-      let arr = JSON.parse(JSON.stringify(this.value))
-      for (let item of arr) {
-        item.$_key = Symbol.for('$handle-key:' + JSON.stringify(item))
-      }
-      return arr
-    },
-    maginDirection () {
-      return this.direction === 'horizontal' ? 'margin-right' : 'margin-bottom'
-    },
     ulPosition () {
       let obj = {
         left: this.left,
@@ -126,17 +113,19 @@ export default {
   },
   methods: {
     getItem (item, index) {
-      return Object.assign({}, item, { $index: index, $select: this.nowClickIndex === item.$_key })
+      return Object.assign({}, item, { $index: index, $select: this.nowClickIndex === index })
     },
     handle () {
-      let _list = JSON.parse(JSON.stringify(this.value))
+      let _list = this.value
       let _nowItem = _list[this.curHandleIndex]
-      switch (this.type) {
+      switch (this.eventType) {
         case 'up':
+          this.nowClickIndex--
           _list.splice(this.curHandleIndex, 1)
           _list.splice(this.curHandleIndex - 1, 0, _nowItem)
           break
         case 'down':
+          this.nowClickIndex++
           _list.splice(this.curHandleIndex, 1)
           _list.splice(this.curHandleIndex + 1, 0, _nowItem)
           break
@@ -145,20 +134,24 @@ export default {
       }
       this.$emit('input', _list)
       this.$forceUpdate()
-      this.$emit(this.type, this.curHandleIndex)
+      this.$emit(this.eventType, _nowItem, this.curHandleIndex)
     },
-    handleEvent (type, item, index) {
-      this.type = type
+    handleEvent (eventType, item, index) {
+      this.eventType = eventType
       this.curHandleIndex = index
-      let _type = type.substr(0, 1).toUpperCase() + type.substr(1)
+      let _type = eventType.substr(0, 1).toUpperCase() + eventType.substr(1)
       if (typeof this[`before${_type}`] === 'function') {
-        this[`before${_type}`](this.handle)
+        this[`before${_type}`](this.handle, item, index)
       } else {
         this.handle()
       }
     },
-    switchCur (item) {
-      this.nowClickIndex = item.$_key
+    switchCur (item, index) {
+      if (this.display === 'visible') {
+        return
+      }
+      this.nowClickIndex = this.nowClickIndex !== index ? index : ''
+      this.$emit('change', item, index)
     }
   }
 }

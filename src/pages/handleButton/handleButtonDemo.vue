@@ -5,14 +5,13 @@
       @edit="editViewItem"
     >
       <div slot-scope="item" class="view-item" :class="{'cur':item.data.$select}">
-        <ec-text v-if="item.data.fileType==='text'" :src="item.data.fileUrl"></ec-text>
-        <a href="javascript:;" v-if="item.data.fileType==='link'">{{item.data.customer}}</a>
+        <span v-if="item.data.fileType==='text'">{{item.data.content}}</span>
         <video :src="item.data.fileUrl" v-if="item.data.fileType==='video'"></video>
         <audio :src="item.data.fileUrl" controls="controls" v-if="item.data.fileType==='audio'"></audio>
-        <ec-image :src="item.data.fileUrl" v-if="item.data.fileType==='image'" />
+        <img :src="item.data.fileUrl" v-if="item.data.fileType==='image'" />
       </div>
     </handle-button>
-    <p>
+     <p>
       <br />
     </p>
     <handle-button
@@ -21,7 +20,7 @@
       direction="vertical"
       right="6px"
       bottom="center"
-      show
+      display="visible"
       :beforeDelete="test"
       :beforeUp="test"
       :beforeDown="test"
@@ -33,22 +32,51 @@
         </div>
         <div class="message-item___info">
           <p v-if="item.data.fileType==='text'">
-            <ec-text :src="item.data.fileUrl"></ec-text>
+            <span>{{item.data.content}}</span>
           </p>
           <p v-else>{{item.data.fileName}}</p>
           <span class="message-item___info_size">{{formatSize(item.data.size)}}</span>
         </div>
       </div>
     </handle-button>
-    <p>
+    <!--<p>
       <br />
-    </p>
-    <handle-button-old v-model="sortData" @edit="editViewItem" />
+    </p> -->
+    <!-- <handle-button-old v-model="sortData" @edit="editViewItem" /> -->
+    <handle-button-old v-model="sortData">
+      <div slot-scope="item" class="view-item" :class="{'cur':item.data.$select}">
+        <span v-if="item.data.fileType==='text'">{{item.data.content}}123</span>
+        <video :src="item.data.fileUrl" v-if="item.data.fileType==='video'"></video>
+        <audio :src="item.data.fileUrl" controls="controls" v-if="item.data.fileType==='audio'"></audio>
+        <img :src="item.data.fileUrl" v-if="item.data.fileType==='image'" />
+      </div>
+    </handle-button-old>
+    <handle-button-old
+      v-model="sortData"
+      direction="vertical"
+      right="6px"
+      display="visible"
+      bottom="center"
+    >
+      <div slot-scope="item" class="handle-item">
+        <div class="message-item___box">
+          <span class="message-item___icon iconfont" :class="iconByFileType[item.data.fileType]"></span>
+        </div>
+        <div class="message-item___info">
+          <p v-if="item.data.fileType==='text'">
+            <span>{{item.data.content}}</span>
+          </p>
+          <p v-else>{{item.data.fileName}}</p>
+          <span class="message-item___info_size">{{formatSize(item.data.size)}}</span>
+        </div>
+      </div>
+    </handle-button-old>
   </div>
 </template>
 <script>
 import HandleButton from './components/HandleButton'
-import HandleButtonOld from './components/HandleButtonOld'
+// import HandleButtonOld from './components/HandleButtonOld'
+import HandleButtonOld from './components/HandleButtonOld-copy'
 export default {
   data () {
     return {
@@ -62,19 +90,9 @@ export default {
       sortData: [
         {
           fileType: 'text',
-          fileUrl:
-            'https://file-cdn-china.wechatify.net/marketing/sms/mms_material/lm9wf5m8j7.txt',
-          index: 1,
-          size: 12,
-          fileName: 'lm9wf5m8j7.txt'
-        },
-        {
-          fileType: 'text',
-          fileUrl:
-            'https://file-cdn-china.wechatify.net/marketing/sms/mms_material/gWp3COMYDA.txt',
+          content: '前端开发',
           index: 2,
-          size: 12,
-          fileName: 'gWp3COMYDA.txt'
+          size: 12
         },
         {
           fileNmae: '251bb6d882024b11a6051d604ac51fc3.jpeg',
@@ -84,50 +102,17 @@ export default {
           index: 3,
           size: 101109,
           fileName: '53ce422f14e516af0eb9a5c7251cc1ca.jpeg'
+        },
+        {
+          fileType: 'text',
+          content: '守候',
+          index: 5,
+          size: 12
         }
       ]
     }
   },
   components: { HandleButton, HandleButtonOld },
-  mounted () {
-    setTimeout(() => {
-      this.sortData = [
-        {
-          fileType: 'text',
-          fileUrl:
-            'https://file-cdn-china.wechatify.net/marketing/sms/mms_material/gWp3COMYDA.txt',
-          index: 2,
-          size: 12,
-          fileName: 'gWp3COMYDA.txt'
-        },
-        {
-          fileType: 'text',
-          fileUrl:
-            'https://file-cdn-china.wechatify.net/marketing/sms/mms_material/lm9wf5m8j7.txt',
-          index: 1,
-          size: 12,
-          fileName: 'lm9wf5m8j7.txt'
-        },
-        {
-          fileNmae: '251bb6d882024b11a6051d604ac51fc3.jpeg',
-          fileType: 'image',
-          fileUrl:
-            'https://file-cdn-china.wechatify.net/marketing/sms/mms_material/53ce422f14e516af0eb9a5c7251cc1ca.jpeg',
-          index: 3,
-          size: 101109,
-          fileName: '53ce422f14e516af0eb9a5c7251cc1ca.jpeg'
-        },
-        {
-          fileType: 'text',
-          fileUrl:
-            'https://file-cdn-china.wechatify.net/marketing/sms/mms_material/lm9wf5m8j7.txt',
-          index: 5,
-          size: 12,
-          fileName: 'lm9wf5m8j7.txt'
-        }
-      ]
-    }, 5000)
-  },
   methods: {
     formatSize (val) {
       if (val === 0) {
@@ -162,9 +147,9 @@ export default {
   margin: 0 auto;
   .view-item {
     padding: 10px;
-    border:1px dashed transparent;
+    border:4px dashed transparent;
     &.cur{
-      border:1px dashed #003453;
+      border:4px double #ccc;
     }
   }
 }

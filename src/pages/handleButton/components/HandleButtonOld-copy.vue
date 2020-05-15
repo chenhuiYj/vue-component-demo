@@ -2,16 +2,17 @@
   <div class="ec-handle">
     <div
       class="ec-handle--item"
-      v-for="(item,index) in sortData"
+      v-for="(item,index) in value"
       :key="index"
-      :class="{'cur':nowClickIndex===index}"
+      :class="{'cur':nowClickIndex===index || display==='visible'}"
       @click="switchCur(item,index)"
     >
-      <span v-if="item.fileType==='text'">{{item.content}}</span>
-      <video :src="item.fileUrl" v-if="item.fileType==='video'"></video>
-      <audio :src="item.fileUrl" controls="controls" v-if="item.fileType==='audio'"></audio>
-      <img :src="item.fileUrl" v-if="item.fileType==='image'" />
-      <ul class="customer-form-view-action-box">
+      <slot :data="getItem(item,index)"></slot>
+      <ul class="customer-form-view-action-box"
+          :style="ulPosition"
+          v-if="display!=='none'"
+          :class="{'handle-vertical':direction==='vertical'}"
+      >
         <li class="iconfont icon-icon-cus-edit" @click.stop="handleEvent('edit',index)"></li>
         <li
           class="iconfont icon-icon-cus-up"
@@ -38,6 +39,30 @@ export default {
       default () {
         return []
       }
+    },
+    top: {
+      type: [String, Number],
+      default: '0'
+    },
+    bottom: {
+      type: [String, Number],
+      default: 'auto'
+    },
+    left: {
+      type: [String, Number],
+      default: 'auto'
+    },
+    right: {
+      type: [String, Number],
+      default: '-26px'
+    },
+    direction: {
+      type: String,
+      default: 'horizontal'
+    },
+    display: {
+      type: [String],
+      default: 'default'
     }
   },
   data () {
@@ -45,17 +70,36 @@ export default {
       nowClickIndex: ''
     }
   },
-  mounted () {},
   computed: {
-    sortData () {
-      let arr = JSON.parse(JSON.stringify(this.value))
-      for (let i = 0; i < arr.length; i++) {
-        arr[i].$_key = i
+    ulPosition () {
+      let obj = {
+        left: this.left,
+        right: this.right,
+        top: this.top,
+        bottom: this.bottom
       }
-      return arr
+      let _x = '0'
+      let _y = '0'
+      if (this.top === 'center' || this.bottom === 'center') {
+        obj.top = '50%'
+        obj.bottom = 'auto'
+        _y = '-50%'
+        obj.transform = `translate(${_x},${_y})`
+      }
+      if (this.left === 'center' || this.right === 'center') {
+        obj.left = '50%'
+        obj.right = 'auto'
+        _x = '-50%'
+        obj.transform = `translate(${_x},${_y})`
+      }
+      return obj
     }
   },
+  mounted () {},
   methods: {
+    getItem (item, index) {
+      return Object.assign({}, item, { $index: index, $select: this.nowClickIndex === index })
+    },
     handleEvent (type, index) {
       let _list = JSON.parse(JSON.stringify(this.value))
       let _nowItem = _list[index]
@@ -96,8 +140,6 @@ export default {
 }
 .ec-handle--item {
   position: relative;
-  border: 1px dashed transparent;
-  padding: 10px;
   ul {
     position: absolute;
     right: -26px;
@@ -112,7 +154,6 @@ export default {
     }
   }
   &.cur {
-    border: 1px dashed #003453;
     ul {
       display: inline-block;
     }
