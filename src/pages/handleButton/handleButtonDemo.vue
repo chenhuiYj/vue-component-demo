@@ -1,6 +1,7 @@
 <template>
   <div class="main">
     <handle-button
+      style="margin-bottom:100px;"
       v-model="sortData"
       @edit="editViewItem"
     >
@@ -15,16 +16,17 @@
       <br />
     </p>
     <handle-button
+      style="margin-bottom:100px;"
       v-model="sortData"
       @edit="editViewItem"
       direction="vertical"
       right="6px"
       bottom="center"
       display="visible"
-      :beforeDelete="test"
-      :beforeUp="test"
-      :beforeDown="test"
-      :beforeEdit="test"
+      :beforeDelete="handleBefore"
+      :beforeUp="handleBefore"
+      :beforeDown="handleBefore"
+      :beforeEdit="handleBefore"
     >
       <div slot-scope="item" class="handle-item">
         <div class="message-item___box">
@@ -43,7 +45,7 @@
       <br />
     </p> -->
     <!-- <handle-button-old v-model="sortData" @edit="editViewItem" /> -->
-    <handle-button-old v-model="sortData">
+    <handle-button-old v-model="sortData" style="margin-bottom:100px;">
       <div slot-scope="item" class="view-item" :class="{'cur':item.data.$select}">
         <span v-if="item.data.fileType==='text'">{{item.data.content}}123</span>
         <video :src="item.data.fileUrl" v-if="item.data.fileType==='video'"></video>
@@ -52,11 +54,13 @@
       </div>
     </handle-button-old>
     <handle-button-old
+      style="margin-bottom:500px;"
       v-model="sortData"
       direction="vertical"
       right="6px"
       display="visible"
       bottom="center"
+      :beforeDelete="handleBefore"
     >
       <div slot-scope="item" class="handle-item">
         <div class="message-item___box">
@@ -131,8 +135,15 @@ export default {
       }
     },
     editViewItem () {},
-    test (done) {
-      this.$confirm('确认进行操作？')
+    /**
+     * @description 操作前的回调
+     * @augments done - 用于执行操作
+     * @augments item - 当前项
+     * @augments index - 当前索引
+     */
+    handleBefore (done, item, index) {
+      // 点击确认才进行操作，点击取消不做处理
+      this.$confirm('确认进行删除操作？')
         .then(() => {
           done()
         })

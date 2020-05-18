@@ -39,8 +39,6 @@ export default {
   .sider-bar{
     width: 200px;
     text-align: center;
-    position: sticky;
-    top:0;
     li{
       line-height: 40px;
       background: #ccc;
@@ -53,6 +51,8 @@ export default {
   }
   .content{
     flex: 1;
+    height: 100vh;
+    overflow-y: auto;
   }
 }
 </style>

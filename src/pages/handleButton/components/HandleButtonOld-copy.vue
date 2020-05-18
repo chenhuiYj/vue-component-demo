@@ -13,18 +13,18 @@
           v-if="display!=='none'"
           :class="{'handle-vertical':direction==='vertical'}"
       >
-        <li class="iconfont icon-icon-cus-edit" @click.stop="handleEvent('edit',index)"></li>
+        <li class="iconfont icon-icon-cus-edit" @click.stop="handleEvent('edit',item,index)"></li>
         <li
           class="iconfont icon-icon-cus-up"
-          @click.stop="handleEvent('up',index)"
+          @click.stop="handleEvent('up',item,index)"
           v-if="index!==0"
         ></li>
         <li
           class="iconfont icon-icon-cus-down"
-          @click.stop="handleEvent('down',index)"
+          @click.stop="handleEvent('down',item,index)"
           v-if="index!==value.length-1"
         ></li>
-        <li class="iconfont icon-icon-cus-del" @click.stop="handleEvent('delete',index)"></li>
+        <li class="iconfont icon-icon-cus-del" @click.stop="handleEvent('delete',item,index)"></li>
       </ul>
     </div>
   </div>
@@ -63,11 +63,25 @@ export default {
     display: {
       type: [String],
       default: 'default'
+    },
+    beforeDelete: {
+      type: Function
+    },
+    beforeUp: {
+      type: Function
+    },
+    beforeDown: {
+      type: Function
+    },
+    beforeEdit: {
+      type: Function
     }
   },
   data () {
     return {
-      nowClickIndex: ''
+      nowClickIndex: '',
+      eventType: '',
+      curHandleIndex: ''
     }
   },
   computed: {
@@ -100,28 +114,52 @@ export default {
     getItem (item, index) {
       return Object.assign({}, item, { $index: index, $select: this.nowClickIndex === index })
     },
-    handleEvent (type, index) {
-      let _list = JSON.parse(JSON.stringify(this.value))
-      let _nowItem = _list[index]
-      switch (type) {
+    /**
+     * @description 执行事件
+     */
+    handle () {
+      let _list = this.value
+      let _nowItem = _list[this.curHandleIndex]
+      switch (this.eventType) {
         case 'up':
           this.nowClickIndex--
-          _list.splice(index, 1)
-          _list.splice(index - 1, 0, _nowItem)
+          _list.splice(this.curHandleIndex, 1)
+          _list.splice(this.curHandleIndex - 1, 0, _nowItem)
           break
         case 'down':
           this.nowClickIndex++
-          _list.splice(index, 1)
-          _list.splice(index + 1, 0, _nowItem)
+          _list.splice(this.curHandleIndex, 1)
+          _list.splice(this.curHandleIndex + 1, 0, _nowItem)
           break
         case 'delete':
-          _list.splice(index, 1)
+          _list.splice(this.curHandleIndex, 1)
       }
       this.$emit('input', _list)
-      this.$emit(type, _nowItem, index)
+      this.$forceUpdate()
+      this.$emit(this.eventType, _nowItem, this.curHandleIndex)
+    },
+    /**
+     * @description 处理事件
+     */
+    handleEvent (eventType, item, index) {
+      // 记录事件类型
+      this.eventType = eventType
+      // 记录当前操作项的索引
+      this.curHandleIndex = index
+      let _type = eventType.substr(0, 1).toUpperCase() + eventType.substr(1)
+      if (typeof this[`before${_type}`] === 'function') {
+        // 把当前操作的函数，当前项，索引作为参数，传给调用函数
+        this[`before${_type}`](this.handle, item, index)
+      } else {
+        this.handle()
+      }
     },
     switchCur (item, index) {
-      this.nowClickIndex = index
+      if (this.display === 'visible') {
+        return
+      }
+      this.nowClickIndex = this.nowClickIndex !== index ? index : ''
+      this.$emit('change', item, index)
     }
   }
 }
