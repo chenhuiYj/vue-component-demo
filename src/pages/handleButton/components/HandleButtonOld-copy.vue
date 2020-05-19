@@ -8,10 +8,11 @@
       @click="switchCur(item,index)"
     >
       <slot :data="getItem(item,index)"></slot>
-      <ul class="customer-form-view-action-box"
-          :style="ulPosition"
-          v-if="display!=='none'"
-          :class="{'handle-vertical':direction==='vertical'}"
+      <ul
+        class="customer-form-view-action-box"
+        :style="ulPosition"
+        v-if="display!=='none'"
+        :class="{'handle-vertical':direction==='vertical'}"
       >
         <li class="iconfont icon-icon-cus-edit" @click.stop="handleEvent('edit',item,index)"></li>
         <li

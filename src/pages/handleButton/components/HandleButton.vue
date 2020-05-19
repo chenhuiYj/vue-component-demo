@@ -4,7 +4,7 @@
       class="ec-handle--item"
       v-for="(item,index) in value"
       :key="index"
-      :class="{'cur':nowClickIndex===index ||display==='visible'}"
+      :class="{'cur':nowClickIndex===index || display==='visible'}"
       @click="switchCur(item,index)"
     >
       <slot :data="getItem(item,index)"></slot>
