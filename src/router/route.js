@@ -1,5 +1,6 @@
 import index from '../pages/index'
 import handleButton from '../pages/handleButton/handleButtonDemo'
+import tableController from '../pages/tableController/tableController'
 
 export default [
   {
@@ -13,5 +14,9 @@ export default [
   {
     path: '/handleButton',
     component: handleButton
+  },
+  {
+    path: '/tableController',
+    component: tableController
   }
 ]
