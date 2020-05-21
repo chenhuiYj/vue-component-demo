@@ -28,7 +28,9 @@
         <li class="iconfont icon-icon-cus-del" @click.stop="handleEvent('delete',item,index)"></li>
       </ul>
       <el-dropdown v-else-if="type==='dropdown'" class="customer-form-view-action-box" :style="ulPosition">
-        操作按钮
+        <span class="el-dropdown-link">
+          下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
         <el-dropdown-menu>
           <el-dropdown-item><div>编辑</div></el-dropdown-item>
           <el-dropdown-item><div>上移</div></el-dropdown-item>
