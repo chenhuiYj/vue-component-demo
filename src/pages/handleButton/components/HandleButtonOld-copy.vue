@@ -11,7 +11,7 @@
       <ul
         class="customer-form-view-action-box"
         :style="ulPosition"
-        v-if="display!=='none'"
+        v-if="type!=='dropdown'&&display!=='none'"
         :class="{'handle-vertical':direction==='vertical'}"
       >
         <li class="iconfont icon-icon-cus-edit" @click.stop="handleEvent('edit',item,index)"></li>
@@ -27,6 +27,15 @@
         ></li>
         <li class="iconfont icon-icon-cus-del" @click.stop="handleEvent('delete',item,index)"></li>
       </ul>
+      <el-dropdown v-else-if="type==='dropdown'" class="customer-form-view-action-box" :style="ulPosition">
+        操作按钮
+        <el-dropdown-menu>
+          <el-dropdown-item><div>编辑</div></el-dropdown-item>
+          <el-dropdown-item><div>上移</div></el-dropdown-item>
+          <el-dropdown-item><div>下移</div></el-dropdown-item>
+          <el-dropdown-item><div>删除</div></el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
     </div>
   </div>
 </template>
@@ -76,6 +85,9 @@ export default {
     },
     beforeEdit: {
       type: Function
+    },
+    type: {
+      type: [String]
     }
   },
   data () {

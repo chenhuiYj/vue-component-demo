@@ -57,6 +57,7 @@
       style="margin-bottom:500px;"
       v-model="sortData"
       direction="vertical"
+      type="dropdown"
       right="6px"
       display="visible"
       bottom="center"
