@@ -5,7 +5,9 @@
       v-for="(item,index) in value"
       :key="index"
       :class="{'cur':nowClickIndex===index || display==='visible'}"
-      @click="switchCur(item,index)"
+      @click="switchCur(item,index,'click')"
+      @mouseenter="switchCur(item,index,'hover')"
+      @mouseleave="handleMouseLeave"
     >
       <slot :data="getItem(item,index)"></slot>
       <ul
@@ -89,7 +91,11 @@ export default {
       type: Function
     },
     type: {
-      type: [String]
+      type: String
+    },
+    triggle: {
+      type: String,
+      default: 'click'
     }
   },
   data () {
@@ -169,12 +175,20 @@ export default {
         this.handle()
       }
     },
-    switchCur (item, index) {
+    switchCur (item, index, eventType) {
       if (this.display === 'visible') {
+        return
+      }
+      if (eventType !== this.triggle) {
         return
       }
       this.nowClickIndex = this.nowClickIndex !== index ? index : ''
       this.$emit('change', item, index)
+    },
+    handleMouseLeave () {
+      if (this.triggle === 'hover') {
+        this.nowClickIndex = ''
+      }
     }
   }
 }

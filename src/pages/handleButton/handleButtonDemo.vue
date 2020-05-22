@@ -45,7 +45,7 @@
       <br />
     </p> -->
     <!-- <handle-button-old v-model="sortData" @edit="editViewItem" /> -->
-    <handle-button-old v-model="sortData" style="margin-bottom:100px;">
+    <handle-button-old v-model="sortData" style="margin-bottom:100px;" triggle="hover">
       <div slot-scope="item" class="view-item" :class="{'cur':item.data.$select}">
         <span v-if="item.data.fileType==='text'">{{item.data.content}}123</span>
         <video :src="item.data.fileUrl" v-if="item.data.fileType==='video'"></video>
