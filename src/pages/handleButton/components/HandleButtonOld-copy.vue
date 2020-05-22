@@ -27,15 +27,15 @@
         ></li>
         <li class="iconfont icon-icon-cus-del" @click.stop="handleEvent('delete',item,index)"></li>
       </ul>
-      <el-dropdown v-else-if="type==='dropdown'" class="customer-form-view-action-box" :style="ulPosition">
+      <el-dropdown v-else-if="type==='dropdown'" class="customer-form-view-action-box" :style="ulPosition" style="position:absolute;">
         <span class="el-dropdown-link">
-          下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
+          操作<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu>
-          <el-dropdown-item><div>编辑</div></el-dropdown-item>
-          <el-dropdown-item><div>上移</div></el-dropdown-item>
-          <el-dropdown-item><div>下移</div></el-dropdown-item>
-          <el-dropdown-item><div>删除</div></el-dropdown-item>
+          <el-dropdown-item><div @click.stop="handleEvent('edit',item,index)">编辑</div></el-dropdown-item>
+          <el-dropdown-item v-if="index!==0"><div @click.stop="handleEvent('up',item,index)">上移</div></el-dropdown-item>
+          <el-dropdown-item v-if="index!==value.length-1"><div @click.stop="handleEvent('down',item,index)">下移</div></el-dropdown-item>
+          <el-dropdown-item><div @click.stop="handleEvent('delete',item,index)">删除</div></el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
