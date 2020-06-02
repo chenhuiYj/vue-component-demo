@@ -12,4 +12,3 @@ npm install
 /src/pages/ - 封装常用的组件
   
  - handleButton 类似 toolbar 的操作按钮组件
- - tableController 表格的进一步封装
